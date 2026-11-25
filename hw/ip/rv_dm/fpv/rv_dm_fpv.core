@@ -1,0 +1,38 @@
+CAPI=2:
+# Copyright lowRISC contributors (OpenTitan project).
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+#
+# FPV target for rv_dm (Earl Grey configuration): the wrapper (tb/rv_dm_tb.sv), the binds
+# (tb/rv_dm_bind_fpv.sv) and the testbench (vip/rv_dm_assert_fpv.sv). Run with
+# hw/ip/rv_dm/fpv/rv_dm_formal_cfg.hjson.
+name: lowrisc:fpv:rv_dm_fpv:0.1
+description: "FPV for the RISC-V Debug Module (rv_dm), Earl Grey configuration"
+
+filesets:
+  files_formal:
+    depend:
+      - lowrisc:ip:tlul
+      - lowrisc:prim:all
+      - lowrisc:ip:rv_dm
+      # Earl Grey provides the virtual lowrisc:virtual_constants:top_racl_pkg.
+      - lowrisc:earlgrey_constants:top_racl_pkg
+    files:
+      - tb/rv_dm_tb.sv
+      - vip/rv_dm_assert_fpv.sv
+      - tb/rv_dm_bind_fpv.sv
+    file_type: systemVerilogSource
+
+targets:
+  default: &default_target
+    # Only used to produce the file list for Jasper.
+    default_tool: icarus
+    filesets:
+      - files_formal
+    toplevel: rv_dm_tb
+
+  formal:
+    <<: *default_target
+
+  lint:
+    <<: *default_target
