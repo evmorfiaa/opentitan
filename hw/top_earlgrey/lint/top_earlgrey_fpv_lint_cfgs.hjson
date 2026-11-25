@@ -18,6 +18,13 @@
   rel_path: "hw/top_earlgrey/fpv/lint/{tool}/summary"
 
   use_cfgs: [{
+                name: rv_dm_fpv
+                fusesoc_core: lowrisc:fpv:rv_dm_fpv
+                import_cfgs: ["{proj_root}/hw/lint/tools/dvsim/common_lint_cfg.hjson"]
+                additional_fusesoc_argument: "--mapping=lowrisc:systems:top_earlgrey:0.1"
+                rel_path: "hw/ip/rv_dm/rv_dm_fpv/lint/{tool}"
+              }
+             {
               name: alert_handler_esc_timer_fpv
               fusesoc_core: lowrisc:earlgrey_fpv:alert_handler_esc_timer_fpv
               import_cfgs: ["{proj_root}/hw/lint/tools/dvsim/common_lint_cfg.hjson"]
