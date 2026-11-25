@@ -57,6 +57,11 @@ if {$env(TASK) == "FpvSecCm"} {
     +define+FPV_ON+$env(FPV_DEFINES) \
     -bbox_m usbdev_aon_wake \
     -f [glob *.scr]
+} elseif {$env(DUT_TOP) == "rv_dm_tb"} {
+  analyze -sv09 \
+    +define+FPV_ON+$env(FPV_DEFINES) \
+    -bbox_m dmi_jtag \
+    -f [glob *.scr]
 } else {
   analyze -sv09 \
     +define+FPV_ON+$env(FPV_DEFINES) \
@@ -152,12 +157,9 @@ if {($env(DUT_TOP) == "pinmux_tb") || ($env(DUT_TOP) == "pinmux_chip_tb")} {
   clock -rate {esc_rst_tx_i} clk_lc_i
   reset -expr {!rst_ni !rst_slow_ni !rst_main_ni !rst_lc_ni}
 
-} elseif {$env(DUT_TOP) == "rv_dm"} {
+} elseif {$env(DUT_TOP) == "rv_dm_tb"} {
   clock clk_i -both_edges
-  clock jtag_i.tck
-  clock -rate {testmode, unavailable_i, reg_tl_d_i, sba_tl_h_i} clk_i
-  clock -rate {jtag_i.tms, jtag_i.tdi} jtag_i.tck
-  reset -expr {!rst_ni !jtag_i.trst_n}
+  reset -expr {!rst_ni !rst_lc_ni !dut.dmi_rst_n}
 
 } elseif {$env(DUT_TOP) == "spi_device"} {
   clock clk_i -both_edges
